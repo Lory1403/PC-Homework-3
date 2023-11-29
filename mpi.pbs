@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Job name
+#PBS -N hw3
+
+# Output files
+#PBS -o ./hw3.o
+#PBS -e ./hw3.e
+
+# Queue name
+#PBS -q short_cpuQ
+
+# Number of nodes, cpus, mpi processors and amount of memory
+#PBS -l select=1:ncpus=4:mpiprocs=4:mem=1mb
+
+# Modules for C and MPI
+module load gcc91
+module load mpich-3.2.1--gcc-9.1.0
+
+g++() {
+    g++-9.1.0 "$@"
+}
+
+g++ --version
+
+gcc() {
+    gcc-9.1.0 "$@"
+}
+gcc --version
+mpicc --version
+
+# To check the architecture
+lscpu
+
+# Select the working directory 
+cd /home/lorenzo.fasol
+
+# Before running the code should be compiled
+mpicc hw3.c -o hw3.out
+
+# Run the code
+mpiexec -np 4 ./hw3.out
+# If you set the number of mpi processors in line 12, here it is enough to type
+# mpiexec ./code.out
