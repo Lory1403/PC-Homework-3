@@ -37,6 +37,7 @@ cd /home/$USER/HW3
 #mpicc src/matT.c -o out/matT.out -lm
 
 # Weak scaling
+printf "Weak scaling\n"
 printf "64 - matT - %s\n" $(mpiexec out/matT.out 64)
 printf "128 - matT - %s\n" $(mpiexec out/matT.out 128)
 printf "256 - matT - %s\n" $(mpiexec out/matT.out 256)
@@ -48,10 +49,11 @@ printf "256 - matT_blocks - %s\n" $(mpiexec out/matT_blocks.out 256)
 printf "512 - matT_blocks - %s\n" $(mpiexec out/matT_blocks.out 512)
 
 # Strong scaling
+printf "Strong scaling\n"
 printf "512 - matT - %s\n" $(mpiexec out/matT.out 512)
 printf "2048 - matT - %s\n" $(mpiexec out/matT.out 2048)
 printf "8192 - matT - %s\n" $(mpiexec out/matT.out 8192)
-printf "32768 - matT - %s\n" $(mpiexec out/matT.out 32768)
+# printf "32768 - matT - %s\n" $(mpiexec out/matT.out 32768)
 
 printf "512 - matT_blocks - %s\n" $(mpiexec out/matT_blocks.out 512)
 printf "2048 - matT_blocks - %s\n" $(mpiexec out/matT_blocks.out 2048)

@@ -1,29 +1,29 @@
 \begin{tabularx}{\textwidth}{@{} c c c c c c @{}}
     \caption{\label{table:weak-scaling}Weak scaling}\\
     \toprule
-        \textbf{Cores} & \textbf{Size} & \multicolumn{2}{c}{\textbf{Normal}} & \multicolumn{2}{c}{\textbf{Blocks}}\\
+        \textbf{Ratio} & \textbf{CPUs} & \multicolumn{2}{c}{\textbf{Normal}} & \multicolumn{2}{c}{\textbf{Blocks}}\\
         \cmidrule(lr){3-4}\cmidrule(lr){5-6}
         & & \textbf{Run Time [s]} & \textbf{Bandwidth [GB/s]} & \textbf{Run Time [s]} & \textbf{Bandwidth [GB/s]} \\
     \midrule
     \endhead
-        \multirow{4}{*}{1} & 64  &  &  &  &  \\
-                           & 128 &  &  &  &  \\
-                           & 256 &  &  &  &  \\
-                           & 512 &  &  &  &  \\
+        \multirow{4}{*}{64} & 1  & 0.00034 & 1.45 & 0.000097 & 0.68 \\
+                            & 4  & 0.001141 & 0.69 & 0.001797 & 0.58 \\
+                            & 16 & 0.013206 & 0.95 & 0.010417 & 1.61 \\
+                            & 64 & 0.218325 & 0.92 & 0.171367 & 1.57 \\
     \midrule
-        \multirow{4}{*}{4} & 256  &  &  &  &  \\
-                           & 512  &  &  &  &  \\
-                           & 1024 &  &  &  &  \\
-                           & 2048 &  &  &  &  \\
+        \multirow{4}{*}{128} & 1  & 0.000111 & 1.77 & 0.000336 & 0.78 \\
+                             & 4  & 0.002095 & 1.50 & 0.003130 & 1.34 \\
+                             & 16 & 0.039099 & 1.29 & 0.042607 & 1.58 \\
+                             & 64 & 0.650468 & 1.24 & 0.684192 & 1.57 \\
     \midrule
-        \multirow{4}{*}{16} & 1024 &  &  &  &  \\
-                            & 2048 &  &  &  &  \\
-                            & 4096 &  &  &  &  \\
-                            & 8192 &  &  &  &  \\
+        \multirow{4}{*}{256} & 1  & 0.000441 & 1.78 & 0.001309 & 0.80 \\
+                             & 4  & 0.006750 & 1.86 & 0.010760 & 1.56 \\
+                             & 16 & 0.107758 & 1.87 & 0.158777 & 1.69 \\
+                             & 64 & 5.574380 & 0.58 & 2.789386 & 1.54 \\
     \midrule
-        \multirow{4}{*}{64} & 4096  &  &  &  &  \\
-                            & 8192  &  &  &  &  \\
-                            & 16384 &  &  &  &  \\
-                            & 32768 &  &  &  &  \\
+        \multirow{4}{*}{512} & 1  & 0.002263 & 1.39 & 0.005754 & 0.73 \\
+                             & 4  & 0.025396 & 1.98 & 0.043814 & 1.53 \\
+                             & 16 & 0.659142 & 1.22 & 0.636953 & 1.69 \\
+                             & 64 & - & - & - & 1.51 \\
     \bottomrule
 \end{tabularx}

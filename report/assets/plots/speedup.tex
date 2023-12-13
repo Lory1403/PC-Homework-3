@@ -1,0 +1,99 @@
+\begin{figure}[h!tb]%
+    \centering
+    \captionsetup{type=plot}
+    \caption{\label{plot:speedup}Speedup graphs by size of matrices}
+    \begin{tikzpicture}%
+        \begin{groupplot}[
+                group style={
+                    group size=2 by 1,
+                    group name=plot,
+                    xlabels at=edge bottom,
+                    ylabels at=edge left,
+                    vertical sep=1.5cm,
+                    horizontal sep=1.5cm,
+                }, 
+                width={0.45\linewidth},
+                xlabel={CPUs},
+                ylabel={Speedup [$\times$]},
+                xtick={1, 4, 16, 64},
+                legend to name=legend,
+                legend columns=-1,
+                cycle multiindex* list={
+                    color list
+                        \nextlist
+                    marks
+                        \nextlist
+                },
+            ]
+            \nextgroupplot[
+                title={Normal},
+                xmode=log, 
+                log ticks with fixed point,
+            ]
+
+                \addplot
+                    coordinates {
+                        (1, 1.00)
+                        (4, 0.99)
+                        (16, 0.42)
+                        (64, 0.15)
+                    };
+        
+                \addplot
+                    coordinates {
+                        (1, 1.00)
+                        (4, 2.42)
+                        (16, 2.55)
+                        (64, 0.78)
+                    };
+
+                \addplot
+                    coordinates {
+                        (1, 1.00)
+                        (4, 3.66)
+                        (16, 3.17)
+                        (64, 2.55)
+                    };
+
+            \nextgroupplot[
+                title={Blocks},
+                xmode=log, 
+                log ticks with fixed point,
+            ]
+                \addplot
+                    coordinates {
+                        (1, 1)
+                        (4, 1.64)
+                        (16, 1.64)
+                        (64, 0.60)
+                    };
+                
+                \addplot
+                    coordinates {
+                        (1, 1.00)
+                        (4, 1.81)
+                        (16, 1.91)
+                        (64, 1.61)
+                    };
+
+                \addplot
+                    coordinates {
+                        (1, 1.00)
+                        (4, 2.79)
+                        (16, 4.01)
+                        (64, 3.29)
+                    };
+                
+                \addplot
+                    coordinates {
+                        (1, 1.00)
+                        (4, 2.69)
+                        (16, 6.06)
+                        (64, 5.92)
+                    }; 
+
+                \legend{512, 2048, 8192, 32768}
+        \end{groupplot}
+    \end{tikzpicture}
+    \ref{legend}
+\end{figure}

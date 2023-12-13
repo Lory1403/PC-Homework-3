@@ -12,13 +12,15 @@ but they require more effort and planning to implement effectively.
 OpenMP is ideal for tasks that can be parallelized within a single node, such as %
 loop-level parallelism, and it offers the simplest and most efficient solution %
 for shared-memory systems. MPI, on the other hand, is better suited for larger-scale %
-distributed computations that require communication across multiple nodes. 
-Furthermore, the choice between MPI and OpenMP depends on the architecture of the computing %
-system and the nature of the parallel computing task.
-Combining both techniques into a hybrid model allows leveraging the strengths of both paradigms, %
-but it requires careful planning and considerations regarding workload distribution, %
-overheads, and load balancing to ensure good performance across the entire system.
+distributed computations that require communication across multiple nodes.
 
---------------------------------------------------------------------------------
+The hybrid model made of the synergy between MPI and OpenMP, capitalizes on the advantages of both paradigms. %
+In this hybrid approach, MPI manages communication and coordination between different nodes or processors, %
+while within each node, OpenMP guides the parallelization of tasks through multiple threads. This hybrid model %
+is particularly advantageous in applications demanding both inter-node and intra-node parallelism, effectively %
+leveraging the strengths of both MPI and OpenMP. \\
+However, this approach is also the most complex and challenging to implement, requiring a thorough understanding %
+of both MPI and OpenMP. Effective utilization of this hybrid model demands meticulous planning and thoughtful %
+considerations regarding workload distribution, potential overheads, and the crucial aspect of load balancing. %
+These factors are instrumental in guaranteeing optimal performance across this entire system.
 
-Approfondisci il confronto tra MPI e OpenMP, e la loro combinazione in un modello ibrido.\\

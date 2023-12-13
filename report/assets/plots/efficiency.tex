@@ -1,0 +1,99 @@
+\begin{figure}[h!tb]%
+    \centering
+    \captionsetup{type=plot}
+    \caption{\label{plot:efficiency}Efficiency graphs by size of matrices}
+    \begin{tikzpicture}%
+        \begin{groupplot}[
+                group style={
+                    group size=2 by 1,
+                    group name=plot,
+                    xlabels at=edge bottom,
+                    ylabels at=edge left,
+                    vertical sep=1.5cm,
+                    horizontal sep=1.5cm,
+                }, 
+                width={0.45\linewidth},
+                xlabel={CPUs},
+                ylabel={Efficiency [\%]},
+                xtick={1, 4, 16, 64},
+                legend to name=legend,
+                legend columns=-1,
+                cycle multiindex* list={
+                    color list
+                        \nextlist
+                    marks
+                        \nextlist
+                },
+            ]
+            \nextgroupplot[
+                title={Normal},
+                xmode=log,
+                log ticks with fixed point,
+            ]
+
+                \addplot
+                    coordinates {
+                        (1, 100)
+                        (4, 24.72)
+                        (16, 2.60)
+                        (64, 0.24)
+                    };
+        
+                \addplot
+                    coordinates {
+                        (1, 100)
+                        (4, 60.52)
+                        (16, 15.91)
+                        (64, 1.22)
+                    };
+
+                \addplot
+                    coordinates {
+                        (1, 100)
+                        (4, 91.43)
+                        (16, 19.81)
+                        (64, 3.99)
+                    };
+
+            \nextgroupplot[
+                title={Blocks},
+                xmode=log, 
+                log ticks with fixed point,
+            ]
+                \addplot
+                    coordinates {
+                        (1, 100)
+                        (4, 41.03)
+                        (16, 10.22)
+                        (64, 0.94)
+                    };
+                
+                \addplot
+                    coordinates {
+                        (1, 100)
+                        (4, 45.17)
+                        (16, 11.97)
+                        (64, 2.51)
+                    };
+
+                \addplot
+                    coordinates {
+                        (1, 100)
+                        (4, 69.75)
+                        (16, 25.05)
+                        (64, 5.14)
+                    };
+                
+                \addplot
+                    coordinates {
+                        (1, 100)
+                        (4, 67.21)
+                        (16, 37.90)
+                        (64, 9.25)
+                    }; 
+
+                \legend{512, 2048, 8192, 32768}
+        \end{groupplot}
+    \end{tikzpicture}
+    \ref{legend}
+\end{figure}

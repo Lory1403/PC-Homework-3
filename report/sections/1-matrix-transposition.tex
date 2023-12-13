@@ -1,10 +1,10 @@
 \section*{\label{sec:transposition}Parallel matrix transposition}
 
 The following section describes the implementation of a parallel matrix transposition algorithm with and %
-without blocks using OpenMPI. The algorithm was implemented in \texttt{C}, and the source code is available at %
+without blocks using OpenMPI. The algorithm is implemented in \texttt{C}, and the source code is available at %
 in the \texttt{src} directory of the project repository.
 Instead of developing distinct functions for serial and parallel code, the decision was made to implement %
-a unique algorithms adaptable to the number of available processors. This approach not only maintains code %
+unique algorithms adaptable to the number of available processors. This approach not only maintains code %
 cleanliness but also streamlines the testing process. Furthermore, it facilitates the execution of the serial %
 code while accounting for instructions introducing communication overhead, thereby enabling a more precise %
 comparison between the versions.
@@ -38,7 +38,7 @@ size divided by the number of processors, and $c$ is equal to the size of the ma
 of this approach is that the number of processors must be a divisor of the matrix size (Figure \ref{image:transpose-blocks}).
 
 \begin{figure}[h]
-    \caption{\label{image:transpose-blocks}Divide in $n$ blocks, each transposed individually}
+    \caption{\label{image:transpose-blocks}Divide into $n$ blocks, each transposed individually}
     \centering
     \includegraphics[width=0.7\linewidth]{transpose-blocks.tex}
 \end{figure}
@@ -59,14 +59,14 @@ Also in this scenario, the algorithm introduces specific constraints. The major 
 a perfect square to facilitate an equitable distribution of elements. Additionally, the matrix size must be at least twice the number %
 of processors to ensure that each processor receives at least one element from each row and column of the matrix, thereby guaranteeing %
 an even distribution of computational workload. This safeguards against scenarios where the matrix size might be insufficient to fully %
-utilize the available processing units, potentially resulting in underutilization of computational resources. Thus, these constraints %
+utilize the available processing units, potentially resulting in the underutilization of computational resources. Thus, these constraints %
 collectively aim to optimize the parallel execution of the algorithm by promoting balanced data distribution among processors and %
 maximizing the utilization of available computing resources.
 
 \section*{Result analysis}
 
-The performance of the parallel algorithm was evaluated taking into account both strong and weak scaling. %
-The parameters used for the evaluation are the speedup, the efficiency gains and the bandwidth. The formulas %
+The performance of the parallel algorithm was evaluated considering both strong and weak scaling. %
+The parameters used for the evaluation are the speedup, the efficiency gains, and the bandwidth. The formulas %
 used to calculate these parameters are as follows:
 
 \begin{equation}
@@ -83,8 +83,8 @@ used to calculate these parameters are as follows:
     \label{eq:bandwidth}
     \text{Bandwidth} = \frac{B_r * B_w * \text{Times} * \text{\textit{Float} size}}{\text{Run Time} * 10^9} = 
     \begin{cases}
-        \frac{\text{Matrix Size}^2 * 3 * \text{\textit{Float} Size}}{\text{Run Time}}, & \text{without blocks}\\
-        \frac{\text{Matrix Size}^2 * 4 * \text{\textit{Float} Size}}{\text{Run Time}}, & \text{with blocks}
+        \frac{\text{Matrix Size}^2 * 3 * \text{\textit{Float} Size}}{\text{Run Time} * 10^9}, & \text{without blocks}\\
+        \frac{\text{Matrix Size}^2 * 4 * \text{\textit{Float} Size}}{\text{Run Time} * 10^9}, & \text{with blocks}
     \end{cases} \quad
     \text{[GB/s]}
 \end{equation}
@@ -95,16 +95,42 @@ of the algorithm. In the case of the algorithm without blocks, the matrix is rea
 the matrix, once to transpose it, and once to recompose the final matrix. In the case of the algorithm with blocks, the matrix %
 is read and written once more than the algorithm without blocks, caused by the additional step of subdividing into smaller blocks.
 
-The results obtained are summarized in Table \ref{table:strong-scaling} and \ref{table:weak-scaling}. %
+I encountered challenges in obtaining results for the missing values in the following tables. The execution faced delays, eventually %
+leading to termination by the system when the wall time was reached. This issue likely arises due to insufficient available memory %
+on the assigned nodes.
+
+The results obtained are summarized in Tables \ref{table:strong-scaling} and \ref{table:weak-scaling}. %
 
 \input{assets/tables/strong-scaling}
 \input{assets/tables/weak-scaling}
 
-The results show that the parallel algorithm outperforms the serial version for all tested configurations. The speedup increases %
-with the number of processors, reaching a maximum of 15.5x for 16 processors. The results also show that the parallel algorithm %
-is not perfectly scalable, as the speedup does not increase linearly with the number of processors. This is likely due to the %
-communication overhead introduced by the \texttt{MPI\_Scatterv} and \texttt{MPI\_Gatherv} functions, which are used to distribute %
-and collect the matrix blocks. The results also show that the rectangular block version of the algorithm performs better than the %
-square block version. This is likely due to the fact that the rectangular block version does not require the number of processors %
-to be a perfect square, thereby allowing for a more efficient utilization of available resources. The rectangular block version %
-also outperforms the square block version in terms of bandwidth, as shown in Table \ref{table:strong-scaling} and Table \ref{table:weak-scaling}.
+In the weak scaling plot (Plot \ref{plot:weak-scale}), can be observed that despite the constant workload per processor, the execution time tends to increase as the number of processors grows. %
+This phenomenon is attributed to the fact that an increase in processors also augments the number of communications required for processor synchronization, %
+becoming more frequent and costly.\\
+In the strong scaling one (Plot \ref{plot:strong-scale}), on the other hand, as the number of processors increases, the execution time tends to decrease, although not linearly. %
+This behaviour is attributed to the same reason as in weak scaling. These results are primarily supported by efficiency graphs, demonstrating a decreasing %
+trend in efficiency as the number of processors increases.\\
+Plot \ref{plot:efficiency} shows that the efficiency of the block-based program steadily decreases with an increasing number of processors, while the algorithm without blocks %
+exhibits a more irregular trend, experiencing a sharp efficiency decline already at 4 processors.\\
+Contrary to expectations, the bandwidth graph (Plot \ref{plot:bandwidth}) shows irregular behaviour for the blockless algorithm with a noticeable decline at 64 processors. In contrast, %
+the block-based algorithm exhibits a more regular trend in line with expectations. Nevertheless, a decline is observed with a matrix size of 512 due to its %
+reduced dimensions, preventing optimal utilization of available resources.\\
+The speedup graphs (Plot \ref{plot:speedup}) summarize the aforementioned observations, revealing that the blockless algorithm, despite an initial peak in performance at 4 processors, %
+tends to decrease with an increasing number of CPUs. Meanwhile, the block-based algorithm displays a more consistent trend, experiencing a peak in %
+performance at 16 processors for the larger matrix and maintaining a steady trend for others.\\
+From the strong scaling graph, can be further observed that beyond 4 processors for the blockless version and 16 processors for the block-based version, the %
+execution time tends to stabilize. This phenomenon could be attributed to the fact that as the number of processors increases, the execution time may %
+decrease, but delays introduced by communication between processors offset the saved time.
+
+From all these data, can be asserted that MPI may not be the optimal approach for the direct parallelization of algorithms. %
+Indeed, MPI serves as a framework for inter-process communication rather than algorithm parallelization. MPI is better suited %
+for applications that demand process communication, such as matrix multiplication, where computations are performed in parallel, %
+but inter-process communication is essential for the summation of partial results. In such cases, inter-process communication %
+is substantial and time-consuming, making MPI less suitable as the preferred framework.
+
+\input{assets/plots/strong-scale}
+\input{assets/plots/weak-scale}
+
+\input{assets/plots/efficiency}
+\input{assets/plots/speedup}
+\input{assets/plots/bandwidth}

@@ -1,0 +1,106 @@
+\begin{figure}[h!tb]%
+    \centering
+    \captionsetup{type=plot}
+    \caption{\label{plot:weak-scale}Weak scale graphs by matrix size-CPUs ratio}
+    \begin{tikzpicture}%
+        \begin{groupplot}[
+                group style={
+                    group size=2 by 1,
+                    group name=plot,
+                    xlabels at=edge bottom,
+                    ylabels at=edge left,
+                    vertical sep=1.5cm,
+                    horizontal sep=1.5cm,
+                }, 
+                width={0.45\linewidth},
+                xlabel={CPUs},
+                ylabel={Time [s]},
+                xtick={1,4,16,64},
+                legend to name=legend,
+                legend columns=-1,
+                cycle multiindex* list={
+                    color list
+                        \nextlist
+                    marks
+                        \nextlist
+                },
+            ]
+            \nextgroupplot[
+                title={Normal},
+                xmode=log, 
+                log ticks with fixed point,
+            ]
+
+            \addplot
+                coordinates {
+                    (1, 0.000034)
+                    (4, 0.001141)
+                    (16, 0.013206)
+                    (64, 0.218325)
+                };
+
+            \addplot
+                coordinates {
+                    (1, 0.000111)
+                    (4, 0.002095)
+                    (16, 0.039099)
+                    (64, 0.650468)
+                };
+        
+            \addplot
+                coordinates {
+                    (1, 0.000441)
+                    (4, 0.006750)
+                    (16, 0.107758)
+                    (64, 5.574380)
+                };
+
+            \addplot
+                coordinates {
+                    (1, 0.002263)
+                    (4, 0.025396)
+                    (16, 0.659142)
+                };
+
+            \nextgroupplot[
+                title={Blocks},
+                xmode=log, 
+                log ticks with fixed point,
+            ]
+            \addplot
+                coordinates {
+                    (1, 0.000097)
+                    (4, 0.001797)
+                    (16, 0.010417)
+                    (64, 0.171367)
+                };
+
+            \addplot
+                coordinates {
+                    (1, 0.000336)
+                    (4, 0.003130)
+                    (16, 0.042607)
+                    (64, 0.684192)
+                };
+        
+            \addplot
+                coordinates {
+                    (1, 0.001309)
+                    (4, 0.010760)
+                    (16, 0.158777)
+                    (64, 2.789386)
+                };
+
+            \addplot
+                coordinates {
+                    (1, 0.005754)
+                    (4, 0.043814)
+                    (16, 0.636953)
+                    (64, 11.343099)
+                };
+
+                \legend{64/1, 128/1, 256/1, 512/1}
+        \end{groupplot}
+    \end{tikzpicture}
+    \ref{legend}
+\end{figure}

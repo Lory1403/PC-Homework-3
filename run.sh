@@ -16,6 +16,8 @@ lscpu
 # Select the working directory
 cd /home/$USER/HW3
 
+mkdir -p out
+
 mpicc src/matT.c -o out/matT.out -lm
 mpicc src/matT_blocks.c -o out/matT_blocks.out -lm
 

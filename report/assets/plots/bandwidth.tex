@@ -1,0 +1,99 @@
+\begin{figure}[h!tb]%
+    \centering
+    \captionsetup{type=plot}
+    \caption{\label{plot:bandwidth}Performance graphs by size of matrices}
+    \begin{tikzpicture}%
+        \begin{groupplot}[
+                group style={
+                    group size=2 by 1,
+                    group name=plot,
+                    xlabels at=edge bottom,
+                    ylabels at=edge left,
+                    vertical sep=1.5cm,
+                    horizontal sep=1.5cm,
+                }, 
+                width={0.45\linewidth},
+                xlabel={CPUs},
+                ylabel={Bandwidth [GB/s]},
+                xtick={1, 4, 16, 64},
+                legend to name=legend,
+                legend columns=-1,
+                cycle multiindex* list={
+                    color list
+                        \nextlist
+                    marks
+                        \nextlist
+                },
+            ]
+            \nextgroupplot[
+                title={Normal},
+                xmode=log, 
+                log ticks with fixed point,
+            ]
+
+                \addplot
+                    coordinates {
+                        (1, 1.413)
+                        (4, 1.397)
+                        (16, 0.587)
+                        (64, 0.218)
+                    };
+        
+                \addplot
+                    coordinates {
+                        (1, 0.779)
+                        (4, 1.886)
+                        (16, 1.983)
+                        (64, 0.606)
+                    };
+
+                \addplot
+                    coordinates {
+                        (1, 0.216)
+                        (4, 0.790)
+                        (16, 0.685)
+                        (64, 0.551)
+                    };
+
+            \nextgroupplot[
+                title={Blocks},
+                xmode=log, 
+                log ticks with fixed point,
+            ]
+                \addplot
+                    coordinates {
+                        (1, 0.760)
+                        (4, 1.247)
+                        (16, 1.242)
+                        (64, 0.458)
+                    };
+                
+                \addplot
+                    coordinates {
+                        (1, 0.839)
+                        (4, 1.516)
+                        (16, 1.606)
+                        (64, 1.347)
+                    };
+
+                \addplot
+                    coordinates {
+                        (1, 0.427)
+                        (4, 1.191)
+                        (16, 1.711)
+                        (64, 1.403)
+                    };
+                
+                \addplot
+                    coordinates {
+                        (1, 0.256)
+                        (4, 0.688)
+                        (16, 1.552)
+                        (64, 1.516)
+                    }; 
+
+                    \legend{512, 2048, 8192, 32768}
+        \end{groupplot}
+    \end{tikzpicture}
+    \ref{legend}
+\end{figure}
