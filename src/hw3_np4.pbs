@@ -1,0 +1,59 @@
+#!/bin/bash
+# Job name
+#PBS -N np4
+# Output files
+#PBS -o out/matT_np4.o
+#PBS -e out/matT_np4.e
+# Queue name
+#PBS -q short_cpuQ
+# Number of nodes, cpus, threads and amount of memory
+#PBS -l select=1:ncpus=4:mpiprocs=4
+
+set -e
+
+# Modules for C
+module load gcc91
+module load mpich-3.2.1--gcc-9.1.0
+
+gcc() {
+    gcc-9.1.0 "$@"
+}
+gcc --version
+mpicc --version
+
+# Get the list of UNIQUE nodes assigned to the job
+NODES=$(sort -u $PBS_NODEFILE)
+
+# Loop through each node and get architecture information
+for NODE in $NODES; do
+    echo "Node: $NODE"
+    ssh $NODE "lscpu"
+done
+
+# Select the working directory
+cd /home/$USER/HW3
+
+# The code should be compiled before running the code
+#mpicc src/matT.c -o out/matT.out -lm
+
+# Weak scaling
+printf "256 - matT - %s\n" $(mpiexec out/matT.out 256)
+printf "512 - matT - %s\n" $(mpiexec out/matT.out 512)
+printf "1024 - matT - %s\n" $(mpiexec out/matT.out 1024)
+printf "2048 - matT - %s\n" $(mpiexec out/matT.out 2048)
+
+printf "256 - matT_blocks - %s\n" $(mpiexec out/matT_blocks.out 256)
+printf "512 - matT_blocks - %s\n" $(mpiexec out/matT_blocks.out 512)
+printf "1024 - matT_blocks - %s\n" $(mpiexec out/matT_blocks.out 1024)
+printf "2048 - matT_blocks - %s\n" $(mpiexec out/matT_blocks.out 2048)
+
+# Strong scaling
+printf "512 - matT - %s\n" $(mpiexec out/matT.out 512)
+printf "2048 - matT - %s\n" $(mpiexec out/matT.out 2048)
+printf "8192 - matT - %s\n" $(mpiexec out/matT.out 8192)
+# printf "32768 - matT - %s\n" $(mpiexec out/matT.out 32768)
+
+printf "512 - matT_blocks - %s\n" $(mpiexec out/matT_blocks.out 512)
+printf "2048 - matT_blocks - %s\n" $(mpiexec out/matT_blocks.out 2048)
+printf "8192 - matT_blocks - %s\n" $(mpiexec out/matT_blocks.out 8192)
+printf "32768 - matT_blocks - %s\n" $(mpiexec out/matT_blocks.out 32768)

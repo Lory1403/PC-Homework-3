@@ -1,0 +1,86 @@
+@online{prof-slides,
+  author      = {Laura del Río Martín, Professor},
+  title       = {OpenMP Techniques for Shared Memory Architectures},
+  year        = {2023},
+  url         = {https://didatticaonline.unitn.it/dol/pluginfile.php/1776866/mod_folder/content/0/IntroPARCO-L10.pdf?forcedownload=1},
+  note        = {Lecture 10 slides for professor's Vella course Introduction to parallel computing},
+}
+
+@online{hybrid-mpi-openmp,
+  author = {Claudia Truini, Luca Ferraro, Vittorio Ruggiero},
+  title = {Hybrid Parallel Programming with MPI and OpenMP},
+  year = {2013},
+  url = {https://hpc-forge.cineca.it/files/CoursesDev/public/2013/Introduction%20to%20Parallel%20Computing%20with%20MPI%20and%20OpenMP/Roma/Hybrid-handouts.pdf},
+  note = {Analisi delle performance e parallelizzazione ibrida}
+}
+
+@misc{magalhaes2020efficient,
+      title={Efficient Distributed Transposition Of Large-Scale Multigraphs And High-Cardinality Sparse Matrices}, 
+      author={Bruno Magalhaes and Felix Schürmann},
+      year={2020},
+      eprint={2012.06012},
+      archivePrefix={arXiv},
+      primaryClass={cs.DC}
+}
+
+@InProceedings{10.1007/978-3-319-12307-3_14,
+author="Bowman, John C.
+and Roberts, Malcolm",
+editor="Cojocaru, Monica G.
+and Kotsireas, Ilias S.
+and Makarov, Roman N.
+and Melnik, Roderick V. N.
+and Shodiev, Hasan",
+title="Adaptive Matrix Transpose Algorithms for Distributed Multicore Processors",
+booktitle="Interdisciplinary Topics in Applied Mathematics, Modeling and Computational Science",
+year="2015",
+publisher="Springer International Publishing",
+address="Cham",
+pages="97--103",
+abstract="An adaptive parallel matrix transpose algorithm optimized for distributed multicore architectures running in a hybrid OpenMP/MPI configuration is presented. Significant boosts in speed are observed relative to the distributed transpose used in the state-of-the-art adaptive FFTW library. In some cases, a hybrid configuration allows one to reduce communication costs by reducing the number of message passing interface (MPI) nodes, and thereby increasing message sizes. This also allows for a more slab-like than pencil-like domain decomposition for multidimensional fast Fourier transforms (FFT), reducing the cost of, or even eliminating the need for, a second distributed transpose. Nonblocking all-to-all transfers enable user computation and communication to be overlapped.",
+isbn="978-3-319-12307-3"
+}
+
+@INPROCEEDINGS{1592842,
+  author={Yun He and H. Q. Ding},
+  booktitle={SC '02: Proceedings of the 2002 ACM/IEEE Conference on Supercomputing}, 
+  title={MPI and OpenMP Paradigms on Cluster of SMP Architectures: The Vacancy Tracking Algorithm for Multi-Dimensional Array Transposition}, 
+  year={2002},
+  volume={},
+  number={},
+  pages={6-6},
+  doi={10.1109/SC.2002.10065}
+}
+
+@inproceedings{10.1145/777412.777433,
+author = {Krawezik, G\'{e}raud},
+title = {Performance Comparison of MPI and Three OpenMP Programming Styles on Shared Memory Multiprocessors},
+year = {2003},
+isbn = {1581136617},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/777412.777433},
+doi = {10.1145/777412.777433},
+abstract = {When using a shared memory multiprocessor, the programmer faces the selection of the portable programming model which will deliver the best performance. Even if he restricts his choice to the standard programming environments (MPI and OpenMP), he has a choice of a broad range of programming approaches.To help the programmer in his selection, we compare MPI with three OpenMP programming styles (loop level, loop level with large parallel sections, SPMD) using a subset of the NAS benchmark (CG, MG, FT, LU), two dataset sizes (A and B) and two shared memory multiprocessors (IBM SP3 Night Hawk II, SGI Origin 3800). We also present a path from MPI to OpenMP SPMD guiding the programmers starting from an existing MPI code. We present the first SPMD OpenMP version of the NAS benchmark and compare it with other OpenMP versions from independent sources (PBN, SDSC and RWCP). Experimental results demonstrate that OpenMP provides competitive performance compared to MPI for a large set of experimental conditions. However the price of this performance is a strong programming effort on data set adaptation and inter-thread communications. MPI still provides the best performance under some conditions. We present breakdowns of the execution times and measurements of hardware performance counters to explain the performance differences.},
+booktitle = {Proceedings of the Fifteenth Annual ACM Symposium on Parallel Algorithms and Architectures},
+pages = {118–127},
+numpages = {10},
+keywords = {multiprocessors, MPI, performance evaluation, openMP, shared memory},
+location = {San Diego, California, USA},
+series = {SPAA '03}
+}
+
+@article{https://doi.org/10.1002/cpe.905,
+author = {Krawezik, Géraud and Cappello, Franck},
+title = {Performance comparison of MPI and OpenMP on shared memory multiprocessors},
+journal = {Concurrency and Computation: Practice and Experience},
+volume = {18},
+number = {1},
+pages = {29-61},
+keywords = {MPI, OpenMP, performance evaluation, shared memory multiprocessors},
+doi = {https://doi.org/10.1002/cpe.905},
+url = {https://onlinelibrary.wiley.com/doi/abs/10.1002/cpe.905},
+eprint = {https://onlinelibrary.wiley.com/doi/pdf/10.1002/cpe.905},
+abstract = {Abstract When using a shared memory multiprocessor, the programmer faces the issue of selecting the portable programming model which will provide the best performance. Even if they restricts their choice to the standard programming environments (MPI and OpenMP), they have to select a programming approach among MPI and the variety of OpenMP programming styles. To help the programmer in their decision, we compare MPI with three OpenMP programming styles (loop level, loop level with large parallel sections, SPMD) using a subset of the NAS benchmark (CG, MG, FT, LU), two dataset sizes (A and B), and two shared memory multiprocessors (IBM SP3 NightHawk II, SGI Origin 3800). We have developed the first SPMD OpenMP version of the NAS benchmark and gathered other OpenMP versions from independent sources (PBN, SDSC and RWCP). Experimental results demonstrate that OpenMP provides competitive performance compared with MPI for a large set of experimental conditions. Not surprisingly, the two best OpenMP versions are those requiring the strongest programming effort. MPI still provides the best performance under some conditions. We present breakdowns of the execution times and measurements of hardware performance counters to explain the performance differences. Copyright © 2005 John Wiley \& Sons, Ltd.},
+year = {2006}
+}

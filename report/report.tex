@@ -1,5 +1,8 @@
 % arara: pdflatex: { draft: yes, shell: yes, options: [--output-directory=build] }
 
+% arara: biber: { options: [ '--output-directory=build' ] }
+% arara: --> if missing(toFile('build/report.bbl')) || changed(toFile('build/report.bbl')) || found(toFile('build/report.log'), 'Citation')
+
 %! arara: makeglossaries: { options: [ '-d', 'build' ] }
 %! arara: --> if changed (toFile('build/report.glo')) || missing (toFile('build/report.gls'))
 
@@ -7,90 +10,33 @@
 
 \documentclass{article}
 
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-
-\usepackage{settings/set-color}
-\usepackage{settings/set-geometry}
-\usepackage{settings/set-lists}
-\usepackage{settings/set-graphics}
-\usepackage{settings/set-tables}
-\usepackage{settings/set-spacing}
-\usepackage{settings/set-code}
-\usepackage{settings/set-plots}
+\usepackage{report.preamble}
 
 \begin{document}
 
-\title{Introduction to Parallel Computing\\
-    Homework 2: Parallelizing matrix operations using OpenMP.\\
-    \textbf{Results report}
-}
-\author{Lorenzo Fasol\\lorenzo.fasol@studenti.unitn.it\\18244}
-\date{a.y. 2023/2024}
-\maketitle
-
-\section{Parallel matrix multiplication}
-
-\subsection*{Results analysis}
-Talking about the serial code:\\By interchanging the loops, you can potentially improve cache locality, which can lead to better performance. In your code, you could interchange the j and k loops. This might help reduce cache misses and improve data locality.
-\\\\I also tried to use a technique known as blocking or loop tiling in matrix multiplication. This technique aims to improve cache utilization and reduce cache misses by breaking down the large matrices into smaller blocks or tiles and performing matrix multiplication for each block. But it is not working.
-\begin{code}
-    \captionof{listing}{\label{code:matrix}Blocking or loop tiling algorithm in serial matrix multiplication}
-    \begin{minted}{c}
-int block_size = 50; // Choose an appropriate block size
-
-for (int i = 0; i < rowsA; i += block_size) {
-    for (int j = 0; j < colsB; j += block_size) {
-        for (int k = 0; k < rowsB; k += block_size) {
-            // Multiply the blocks within the bounds (i, j, k) and (i+block_size, j+block_size, k+block_size)
-            for (int ii = i; ii < (i + block_size < rowsA ? i + block_size : rowsA); ii++) {
-                for (int jj = j; jj < (j + block_size < colsB ? j + block_size : colsB); jj++) {
-                    C[ii][jj] = 0.0;
-                    for (int kk = k; kk < (k + block_size < rowsB ? k + block_size : rowsB); kk++) {
-                        C[ii][jj] += A[ii][kk] * B[kk][jj];
-                    }
-                }
-            }
-        }
+    \title{
+        Introduction to Parallel Computing\\
+        Homework 3: Parallelizing matrix operations using MPI\\
+        \textbf{Results report}
     }
-}
-    \end{minted}
-\end{code}
+    \author{
+        Lorenzo Fasol\\
+        lorenzo.fasol@studenti.unitn.it\\
+        227561\\
+        \url{https://github.com/Lory1403/PC-Homework-3}    
+    }
+    \date{a.y. 2023/2024}
+    
+    \maketitle
 
-Identifying potential bottlenecks and proposing optimizations for matrix multiplication (dense matrices) can help improve performance. Here are some common bottlenecks and optimizations:
+    \input{sections/0-introduction}
 
-\textbf{Potential Bottlenecks and Optimizations for Dense Matrices:}
+    \input{sections/1-matrix-transposition}
+    \input{sections/2-parallelism-comparison}
 
-\begin{itemize}
-    \item \textbf{Cache Usage:} Cache performance is crucial in matrix multiplication. Cache misses can be a significant bottleneck. To optimize, you can employ loop tiling or blocking (as discussed earlier) to improve cache locality.
-    \item \textbf{Memory Access Patterns:} Irregular memory access patterns can lead to poor performance. You can optimize by reordering loops to improve data locality and reduce cache misses. For example, loop interchange or loop unrolling can help.
-    \item \textbf{Floating-Point Arithmetic:} Floating-point operations can be a bottleneck on some systems. Consider using hardware-specific optimizations, such as SIMD (Single Instruction, Multiple Data) instructions like SSE/AVX for Intel processors or NEON for ARM processors.
-    \item \textbf{Parallelization:} To further improve performance, consider parallelizing the matrix multiplication. Multi-threading with OpenMP or parallel computing libraries can help, especially on multi-core processors.
-    \item \textbf{Algorithmic Optimizations:} If numerical stability is an issue, consider using improved algorithms like Strassen's algorithm or Coppersmith-Winograd algorithm, which can be faster for large matrices.
-    \item \textbf{Compiler Optimizations:} Modern compilers can apply various optimizations automatically. Use compiler flags like -O2 or -O3 to enable aggressive optimizations.
-\end{itemize}
+    \clearpage
 
-\textbf{Differences between Parallel Algorithms for Dense and Sparse Matrices:}
-
-\begin{itemize}
-    \item \textbf{Data Structure:} Dense matrices have a regular structure with most elements being non-zero. Sparse matrices, on the other hand, have a lot of zero elements, and their data structures vary (e.g., Compressed Sparse Row (CSR) or Compressed Sparse Column (CSC)).
-    \item \textbf{Parallelism:} In dense matrices, parallelism is often straightforward, and you can use straightforward techniques like loop-level parallelism (e.g., OpenMP). In sparse matrices, parallelism can be challenging due to irregular data structures, and specialized algorithms are often required.
-    \item \textbf{Complexity:} Parallel algorithms for sparse matrices are often more complex and may involve dynamic load balancing, data partitioning, and communication overhead. Dense matrix multiplication is generally simpler to parallelize.
-    \item \textbf{Optimizations:} Dense matrix parallelism often focuses on optimizing cache usage and exploiting SIMD instructions. In contrast, sparse matrix parallelism focuses on efficient data structure manipulation, parallel sparse matrix-vector multiplication (SpMV), and potentially leveraging specialized hardware like GPUs.
-    \item \textbf{Sparsity Considerations:} Parallel algorithms for sparse matrices must consider the specific sparsity pattern. The sparsity pattern affects parallelism and load balancing. Some parallel algorithms might perform well with specific sparsity patterns while struggling with others.
-\end{itemize}
-
-In summary, while parallelization is valuable for both dense and sparse matrices, the approaches and challenges differ significantly due to the inherent differences in data structure and complexity. Sparse matrix parallelism typically involves more intricacies and requires tailored algorithms to harness parallel performance effectively.
-\clearpage
-\section{Parallel matrix transposition}
-
-\begin{code}
-    \captionof{listing}{\label{code:matrix}}
-    \begin{minted}{c}
-
-    \end{minted}
-\end{code}
-
-\subsection*{Results analysis}
+    \nocite{*}
+    \printbibliography
 
 \end{document}

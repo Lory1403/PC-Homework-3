@@ -1,0 +1,87 @@
+\begin{figure}[h!tb]%
+    \centering
+    \captionsetup{type=plot}
+    \caption{\label{plot:scale-weak}Weak scaling graph}
+    \begin{tikzpicture}%
+        \begin{axis}[
+            title={without blocks},
+            xlabel={CPUs},
+            ylabel={Time [s]},
+            legend pos=outer north east,
+            xtick={1, 4, 16, 64},
+            cycle multiindex* list={
+                color list
+                    \nextlist
+                marks
+                    \nextlist
+            },
+            width={0.5\linewidth},
+        ]%
+            \addplot
+                coordinates {
+                    (1,100)
+                    (4,98.67)
+                    (16,82.24)
+                    (64,86.98)
+                };
+            
+            \addplot
+                coordinates {
+                    (1,100)
+                    (4,98.67)
+                    (16,82.24)
+                    (64,86.98)
+                };
+            
+            \addplot
+                coordinates {
+                    (1,100)
+                    (4,98.67)
+                    (16,82.24)
+                    (64,86.98)
+                };
+            
+            \addplot
+                coordinates {
+                    (1,100)
+                    (4,98.67)
+                    (16,82.24)
+                    (64,86.98)
+                };
+            
+            \addplot
+                coordinates {
+                    (1,100)
+                    (4,98.67)
+                    (16,82.24)
+                    (64,86.98)
+                };
+            
+            \addplot
+                coordinates {
+                    (1,100)
+                    (4,98.67)
+                    (16,82.24)
+                    (64,86.98)
+                };
+            
+            \addplot
+                coordinates {
+                    (1,100)
+                    (4,98.67)
+                    (16,82.24)
+                    (64,86.98)
+                };
+            
+            \addplot
+                coordinates {
+                    (1,100)
+                    (4,98.67)
+                    (16,82.24)
+                    (64,86.98)
+                };
+
+            \legend{Normal - 1, Normal - 4, Normal - 16, Normal - 64, Blocks - 1, Blocks - 4, Blocks - 16, Blocks - 64}
+        \end{axis}
+    \end{tikzpicture}
+\end{figure}

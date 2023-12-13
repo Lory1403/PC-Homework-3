@@ -1,0 +1,110 @@
+\section*{\label{sec:transposition}Parallel matrix transposition}
+
+The following section describes the implementation of a parallel matrix transposition algorithm with and %
+without blocks using OpenMPI. The algorithm was implemented in \texttt{C}, and the source code is available at %
+in the \texttt{src} directory of the project repository.
+Instead of developing distinct functions for serial and parallel code, the decision was made to implement %
+a unique algorithms adaptable to the number of available processors. This approach not only maintains code %
+cleanliness but also streamlines the testing process. Furthermore, it facilitates the execution of the serial %
+code while accounting for instructions introducing communication overhead, thereby enabling a more precise %
+comparison between the versions.
+
+\setlength{\abovecaptionskip}{-5pt} % Adjust the value as needed
+\begin{wrapfigure}{r}{0.4\textwidth}
+    \caption{\label{image:pointers-to-pointers}Array of pointers to arrays}
+    \centering
+    \includegraphics[width=0.5\linewidth]{pointers-to-pointers.tex}
+\end{wrapfigure}
+
+Two variants of the transposition algorithm were considered, delineating differences in how the matrix is %
+partitioned among processors. The initial approach involves the segmentation of the matrix into square blocks, %
+while the second approach employs rectangular blocks. In both instances, the matrix is treated as a one-dimensional %
+array due to empirical findings suggesting that MPI handles this structure more efficiently than two-dimensional matrices. %
+(Figure \ref{image:pointers-to-pointers}). %
+
+Delving into specifics, the first version subdivides the matrix into blocks of size $n * n$, where $n$ is equal %
+to the matrix size divided by the square root of the number of processors. This ensures equitable distribution, %
+where each processor transposes an equal number of rows and columns. However, this introduces the prerequisite %
+that the number of processors must be a perfect square (Figure \ref{image:matrix-as-array}).
+
+\begin{figure}[h]
+    \caption{\label{image:matrix-as-array}Matrix as a 1D array}
+    \centering
+    \includegraphics[width=0.7\linewidth]{matrix-as-array.tex}
+\end{figure}
+
+Conversely, the second version divides the matrix into blocks of size $f * c$, where $f$ corresponds to the matrix %
+size divided by the number of processors, and $c$ is equal to the size of the matrix itself. The only limitation %
+of this approach is that the number of processors must be a divisor of the matrix size (Figure \ref{image:transpose-blocks}).
+
+\begin{figure}[h]
+    \caption{\label{image:transpose-blocks}Divide in $n$ blocks, each transposed individually}
+    \centering
+    \includegraphics[width=0.7\linewidth]{transpose-blocks.tex}
+\end{figure}
+
+In both scenarios, each processor receives a matrix block, performs the transposition, and subsequently transmits the %
+result to the master processor. The master processor orchestrates the reconstruction of the final matrix, ensuring the %
+appropriate alignment of blocks.
+
+In the version with blocks of the algorithm, the original matrix, still represented as a one-dimensional array, is divided %
+into blocks of equal size, each corresponding to the number of processors. Each of these blocks is further subdivided %
+into the same number of sub-blocks and distributed among the processors, which subsequently transposed them.
+This is achieved by using the \texttt{MPI\_Scatterv} function, which divides the large block into equal-sized blocks and distributes them.
+The transposed results are then transmitted back to the master processor using the \texttt{MPI\_Gatherv} function (the inverse of %
+\texttt{MPI\_Scatterv}), where they are assembled into the large transposed block.
+Before moving on to the next block, the transposed block is appropriately positioned to construct the final transposed %
+matrix, also stored as a one-dimensional array. 
+Also in this scenario, the algorithm introduces specific constraints. The major requirement is that the number of processors must be %
+a perfect square to facilitate an equitable distribution of elements. Additionally, the matrix size must be at least twice the number %
+of processors to ensure that each processor receives at least one element from each row and column of the matrix, thereby guaranteeing %
+an even distribution of computational workload. This safeguards against scenarios where the matrix size might be insufficient to fully %
+utilize the available processing units, potentially resulting in underutilization of computational resources. Thus, these constraints %
+collectively aim to optimize the parallel execution of the algorithm by promoting balanced data distribution among processors and %
+maximizing the utilization of available computing resources.
+
+\section*{Result analysis}
+
+The performance of the parallel algorithm was evaluated taking into account both strong and weak scaling. %
+The parameters used for the evaluation are the speedup, the efficiency gains and the bandwidth. The formulas %
+used to calculate these parameters are as follows:
+
+\begin{equation}
+    \label{eq:speedup}
+    \text{Speedup} = \frac{\text{Serial Run Time}}{\text{Parallel Run Time}} \quad \text{[times]}
+\end{equation}
+
+\begin{equation}
+    \label{eq:efficiency}
+    \text{Efficiency} = \frac{\text{Speedup}}{\text{Number of Processors}} * 100 \quad \text{[\%]}
+\end{equation}
+
+\begin{equation}
+    \label{eq:bandwidth}
+    \text{Bandwidth} = \frac{B_r * B_w * \text{Times} * \text{\textit{Float} size}}{\text{Run Time} * 10^9} = 
+    \begin{cases}
+        \frac{\text{Matrix Size}^2 * 3 * \text{\textit{Float} Size}}{\text{Run Time}}, & \text{without blocks}\\
+        \frac{\text{Matrix Size}^2 * 4 * \text{\textit{Float} Size}}{\text{Run Time}}, & \text{with blocks}
+    \end{cases} \quad
+    \text{[GB/s]}
+\end{equation}
+
+where $B_r$ and $B_w$ are the number of bytes read and written, respectively, and \textit{Float} size is the size of a %
+\texttt{float} variable in bytes. \texttt{Times} is the number of times the matrix is read and written during the execution %
+of the algorithm. In the case of the algorithm without blocks, the matrix is read and written three times: once to subdivide %
+the matrix, once to transpose it, and once to recompose the final matrix. In the case of the algorithm with blocks, the matrix %
+is read and written once more than the algorithm without blocks, caused by the additional step of subdividing into smaller blocks.
+
+The results obtained are summarized in Table \ref{table:strong-scaling} and \ref{table:weak-scaling}. %
+
+\input{assets/tables/strong-scaling}
+\input{assets/tables/weak-scaling}
+
+The results show that the parallel algorithm outperforms the serial version for all tested configurations. The speedup increases %
+with the number of processors, reaching a maximum of 15.5x for 16 processors. The results also show that the parallel algorithm %
+is not perfectly scalable, as the speedup does not increase linearly with the number of processors. This is likely due to the %
+communication overhead introduced by the \texttt{MPI\_Scatterv} and \texttt{MPI\_Gatherv} functions, which are used to distribute %
+and collect the matrix blocks. The results also show that the rectangular block version of the algorithm performs better than the %
+square block version. This is likely due to the fact that the rectangular block version does not require the number of processors %
+to be a perfect square, thereby allowing for a more efficient utilization of available resources. The rectangular block version %
+also outperforms the square block version in terms of bandwidth, as shown in Table \ref{table:strong-scaling} and Table \ref{table:weak-scaling}.

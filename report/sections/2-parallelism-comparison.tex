@@ -1,0 +1,24 @@
+\section*{\label{sec:comparison}Comparison of parallelism techniques}
+
+In summary, the choice between implicit parallelism, MPI, and OpenMP depends on %
+the application, the architecture of the computing system, and the desired level %
+of control over parallelization and communication. Each approach has its strengths %
+and weaknesses, and the most suitable one will vary based on the specific requirements %
+of the parallel computing task at hand.
+Implicit parallelism is the simplest and most straightforward approach, but it %
+offers the least control over the parallelization process. MPI and OpenMP, on the %
+other hand, provide more granular control over parallelism and communication, %
+but they require more effort and planning to implement effectively.
+OpenMP is ideal for tasks that can be parallelized within a single node, such as %
+loop-level parallelism, and it offers the simplest and most efficient solution %
+for shared-memory systems. MPI, on the other hand, is better suited for larger-scale %
+distributed computations that require communication across multiple nodes. 
+Furthermore, the choice between MPI and OpenMP depends on the architecture of the computing %
+system and the nature of the parallel computing task.
+Combining both techniques into a hybrid model allows leveraging the strengths of both paradigms, %
+but it requires careful planning and considerations regarding workload distribution, %
+overheads, and load balancing to ensure good performance across the entire system.
+
+--------------------------------------------------------------------------------
+
+Approfondisci il confronto tra MPI e OpenMP, e la loro combinazione in un modello ibrido.\\
