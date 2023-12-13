@@ -366,4 +366,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Manual file/folder excluded from git tracking
+out/
+
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,linux,windows,latex
